@@ -44,6 +44,8 @@ const createPurchaseList = (req: Request, res: Response) => {
     }
 }
 
+const getPurchaseList = (req: Request, res: Response) => {
+    return res.send(purchaseList)
+}
 
-
-export { createPurchaseList}
+export { createPurchaseList, getPurchaseList }
