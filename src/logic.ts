@@ -2,14 +2,28 @@ import { NextFunction, Request, Response } from 'express'
 import { purchaseList, ids } from './database'
 import { IpurchaseList, InewPuchaseList, IlistRequiredKeys } from './interfaces'
 
+const validateList = (payload: any): IpurchaseList => {
 
+    const keys: Array<string> = Object.keys(payload)
+    const requiredListKeys: Array<IlistRequiredKeys> = ['data', 'listName']
+
+    const containsAllKeys: boolean = requiredListKeys.every((key: string) => {
+        
+        return keys.includes(key)
+    })
+
+    if (!containsAllKeys) {
+        throw new Error(`Required fields are ${requiredListKeys}`)
+    }
+    return payload
+}
 
 
 const createPurchaseList = (req: Request, res: Response) => {
 
     try {
 
-        const listData: IpurchaseList = req.body
+        const listData: IpurchaseList = validateList(req.body)
 
         const id: number = Math.floor(Math.random() * 1000)
 
@@ -44,6 +58,8 @@ const createPurchaseList = (req: Request, res: Response) => {
     }
 }
 
+const getPurchaseList = (req: Request, res: Response) => {
+    return res.send(purchaseList)
+}
 
-
-export { createPurchaseList}
+export { createPurchaseList, getPurchaseList }
