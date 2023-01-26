@@ -5,7 +5,7 @@ import { IpurchaseList, InewPuchaseList, IlistRequiredKeys } from './interfaces'
 
 
 
-const createPurchaseItem = (req: Request, res: Response) => {
+const createPurchaseList = (req: Request, res: Response) => {
 
     try {
 
@@ -46,4 +46,4 @@ const createPurchaseItem = (req: Request, res: Response) => {
 
 
 
-export { createPurchaseItem}
+export { createPurchaseList}

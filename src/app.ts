@@ -1,10 +1,10 @@
 import express, { Application, Request, Response } from 'express'
-import { createPurchaseItem } from './logic'
+import { createPurchaseList } from './logic'
 
 const app: Application = express()
 app.use(express.json())
 
-app.post('/purchaseList', createPurchaseItem )
+app.post('/purchaseList', createPurchaseList )
 
 
 app.listen(3000, () => {
