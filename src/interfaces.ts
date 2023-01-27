@@ -5,15 +5,17 @@ interface IpurchaseItem {
 }
 
 interface IpurchaseList {
-    listName: String,
+    listName: string,
     data: Array<IpurchaseItem>,
+    id?: number,
 }
 
 interface InewPuchaseList extends IpurchaseList {
     id: number,
-    addDate: Date,
+    
 }
 
 type IlistRequiredKeys = 'listName' | 'data'
+type IitemRequiredKeys = 'name' | 'quantity'
 
-export { IpurchaseList, InewPuchaseList, IlistRequiredKeys }
+export { IpurchaseList, InewPuchaseList, IlistRequiredKeys, IpurchaseItem, IitemRequiredKeys }
