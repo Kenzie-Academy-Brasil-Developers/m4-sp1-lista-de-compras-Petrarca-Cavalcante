@@ -11,8 +11,7 @@ interface IpurchaseList {
 }
 
 interface InewPuchaseList extends IpurchaseList {
-    id: number,
-    
+    id: number
 }
 
 type IlistRequiredKeys = 'listName' | 'data'

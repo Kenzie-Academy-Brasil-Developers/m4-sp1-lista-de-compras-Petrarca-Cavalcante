@@ -7,7 +7,8 @@ declare global {
                 listName: string,
                 data: Array<IpurchaseItem>,
             }
-            findPurchaseListIndex: number            
+            findPurchaseListIndex: number,
+            itemIndex: number,            
         }
     }
 }

@@ -26,7 +26,7 @@ const validateListMiddleware = (req: Request, res: Response, next: NextFunction)
         })
     ))
 
-   
+
 
     itemRequiredKeys.forEach((i: string) => {
         items.forEach((item: any) => {
@@ -52,20 +52,37 @@ const validateListMiddleware = (req: Request, res: Response, next: NextFunction)
     next()
 }
 
-// const ensurePurchaseListExists = (req: Request, res: Response, next: NextFunction): Response | void => {
-//     const id: number = parseInt(req.params.id)
+const ensurePurchaseListExists = (req: Request, res: Response, next: NextFunction): Response | void => {
+    const id: number = parseInt(req.params.purchaseListId)
 
-//     const findPurchaseList: number = purchaseList.findIndex(purchaseList => purchaseList.id === id)
+    const findPurchaseList: number = purchaseList.findIndex(purchaseList => purchaseList.id === id)
 
-//     if( findPurchaseList === -1 ) {
-//         return res.status(404).json({
-//             message: 'List not found'
-//         })
-//     }
+    if (findPurchaseList === -1) {
+        return res.status(400).json({
+            message: 'List not found'
+        })
+    }
 
-//     req.findPurchaseListIndex = findPurchaseList
-//     next()
-// }
+    req.findPurchaseListIndex = findPurchaseList
+    next()
+}
 
-export { validateListMiddleware }
-    // ensurePurchaseListExists
+const ensureItemExists = (req: Request, res: Response, next: NextFunction): Response | void => {
+    const listIndex: number = req.findPurchaseListIndex
+    const itemName: string = req.params.itemName
+
+    const listItems = purchaseList[listIndex].data
+
+    const findItemIndex = listItems.findIndex((item: IpurchaseItem) => item.name === itemName )
+    
+    if(findItemIndex === -1){
+        return res.status(400).json({
+            message: 'Item not found'
+        })
+    }
+    
+    req.itemIndex = findItemIndex
+    next()
+}
+
+export { validateListMiddleware, ensurePurchaseListExists, ensureItemExists }
