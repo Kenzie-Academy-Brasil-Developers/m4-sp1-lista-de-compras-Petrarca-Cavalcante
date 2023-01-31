@@ -5,6 +5,7 @@ import { purchaseList } from "./database";
 const validateListMiddleware = (req: Request, res: Response, next: NextFunction): Response | void => {
 
     const keys: Array<string> = Object.keys(req.body)
+    const values = Object.values(req.body)
     const items = req.body.data
     const requiredKeys: Array<IlistRequiredKeys> = ['listName', 'data']
     const itemRequiredKeys: Array<IitemRequiredKeys> = ['name', 'quantity']
@@ -16,12 +17,18 @@ const validateListMiddleware = (req: Request, res: Response, next: NextFunction)
         }
     })
 
+
+    values.forEach((keyValue: any) => {
+        if (typeof keyValue != 'object' && typeof keyValue != 'string') {
+            return res.status(400).json({ message: "Type of value entry is not valid" })
+        }
+    })
+
+
     items.forEach((i: Object) => (
         Object.keys(i).forEach((itemKey: any) => {
             if (!itemRequiredKeys.includes(itemKey)) {
-                return res.status(400).json({
-                    message: `invalid item keys, required item keys are ${itemRequiredKeys}`
-                })
+                return res.status(400).json({ message: `invalid item keys, required item keys are ${itemRequiredKeys}` })
             }
         })
     ))
@@ -30,9 +37,7 @@ const validateListMiddleware = (req: Request, res: Response, next: NextFunction)
     itemRequiredKeys.forEach((i: string) => {
         items.forEach((item: any) => {
             if (!Object.keys(item).includes(i)) {
-                return res.status(400).json({
-                    message: `Missing item keys, required item keys are ${itemRequiredKeys}`
-                })
+                return res.status(400).json({ message: `Missing item keys, required item keys are ${itemRequiredKeys}` })
             }
         })
     })
@@ -53,7 +58,7 @@ const validateListMiddleware = (req: Request, res: Response, next: NextFunction)
 
 const updateValidation = (req: Request, res: Response, next: NextFunction) => {
 
-    const keys = Object.keys(req.body)
+    const keys: Array<string> = Object.keys(req.body)
     const changes = Object.values(req.body)
     const itemRequiredKeys: Array<IitemRequiredKeys> = ['name', 'quantity']
 
@@ -69,7 +74,7 @@ const updateValidation = (req: Request, res: Response, next: NextFunction) => {
     changes.forEach((change: any) => {
         if (typeof change != 'string') {
             return res.status(400).json({
-                message: "Type of entry is not valid"
+                message: "Type of value entry is not valid"
             })
         }
     })
@@ -84,7 +89,7 @@ const ensurePurchaseListExists = (req: Request, res: Response, next: NextFunctio
     const findPurchaseList: number = purchaseList.findIndex(purchaseList => purchaseList.id === id)
 
     if (findPurchaseList === -1) {
-        return res.status(400).json({
+        return res.status(404).json({
             message: 'List not found'
         })
     }
@@ -102,7 +107,7 @@ const ensureItemExists = (req: Request, res: Response, next: NextFunction): Resp
     const findItemIndex = listItems.findIndex((item: IpurchaseItem) => item.name === itemName)
 
     if (findItemIndex === -1) {
-        return res.status(400).json({
+        return res.status(404).json({
             message: 'Item not found'
         })
     }

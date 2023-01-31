@@ -5,7 +5,7 @@ import { validateListMiddleware, updateValidation, ensurePurchaseListExists,ensu
 const app: Application = express()
 app.use(express.json())
 
-app.post('/purchaseList', validateListMiddleware, createPurchaseList )
+app.post('/purchaseList', validateListMiddleware, createPurchaseList)
 app.get('/purchaseList', getPurchaseList )
 app.get('/purchaseList/:purchaseListId', ensurePurchaseListExists, getOnePurchaseList)
 app.get('/purchaseList/:purchaseListId/:itemName', ensurePurchaseListExists, ensureItemExists, getOneItem)
