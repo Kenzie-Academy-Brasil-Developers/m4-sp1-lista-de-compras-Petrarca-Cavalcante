@@ -27,7 +27,6 @@ const validateListMiddleware = (req: Request, res: Response, next: NextFunction)
     ))
 
 
-
     itemRequiredKeys.forEach((i: string) => {
         items.forEach((item: any) => {
             if (!Object.keys(item).includes(i)) {
@@ -52,6 +51,33 @@ const validateListMiddleware = (req: Request, res: Response, next: NextFunction)
     next()
 }
 
+const updateValidation = (req: Request, res: Response, next: NextFunction) => {
+
+    const keys = Object.keys(req.body)
+    const changes = Object.values(req.body)
+    const itemRequiredKeys: Array<IitemRequiredKeys> = ['name', 'quantity']
+
+    keys.forEach((i: any) => {
+
+        if (!itemRequiredKeys.includes(i)) {
+            return res.status(400).json({
+                message: `invalid item keys, required item keys are ${itemRequiredKeys}`
+            })
+        }
+    })
+
+    changes.forEach((change: any) => {
+        if (typeof change != 'string') {
+            return res.status(400).json({
+                message: "Type of entry is not valid"
+            })
+        }
+    })
+
+
+    next()
+}
+
 const ensurePurchaseListExists = (req: Request, res: Response, next: NextFunction): Response | void => {
     const id: number = parseInt(req.params.purchaseListId)
 
@@ -73,16 +99,16 @@ const ensureItemExists = (req: Request, res: Response, next: NextFunction): Resp
 
     const listItems = purchaseList[listIndex].data
 
-    const findItemIndex = listItems.findIndex((item: IpurchaseItem) => item.name === itemName )
-    
-    if(findItemIndex === -1){
+    const findItemIndex = listItems.findIndex((item: IpurchaseItem) => item.name === itemName)
+
+    if (findItemIndex === -1) {
         return res.status(400).json({
             message: 'Item not found'
         })
     }
-    
+
     req.itemIndex = findItemIndex
     next()
 }
 
-export { validateListMiddleware, ensurePurchaseListExists, ensureItemExists }
+export { validateListMiddleware, ensurePurchaseListExists, ensureItemExists, updateValidation }
