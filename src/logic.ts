@@ -12,9 +12,8 @@ const createPurchaseList = (req: Request, res: Response) => {
     }
     ids.push(newId)
     purchaseList.push(newPurchaseList)
-    return res.status(201).json({
-        message: `item de id ${newId} criado`
-    })
+    
+    return res.status(201).json(newPurchaseList)
 }
 
 const getPurchaseList = (req: Request, res: Response) => {
@@ -40,7 +39,7 @@ const patchOneItem = (req: Request, res: Response) => {
 
     listSelection.data[req.itemIndex] = { ...listSelection.data[req.itemIndex], ...req.body }
 
-    return res.status(200).json(`Item has been changed`)
+    return res.status(200).json(listSelection.data[req.itemIndex])
 }
 
 const deleteOneItem = (req: Request, res: Response) => {
